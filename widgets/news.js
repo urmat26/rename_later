@@ -2,9 +2,9 @@ const NEWS_CACHE_KEY = 'news_cache';
 let activeNewsTab = 0;
 
 const NEWS_RSS = {
-  all: 'https://feeds.bbci.co.uk/news/rss.xml',
-  tech: 'https://feeds.bbci.co.uk/news/technology/rss.xml',
-  world: 'https://feeds.bbci.co.uk/news/world/rss.xml',
+  all: 'https://lenta.ru/rss/news',
+  tech: 'https://habr.com/ru/rss/all',
+  world: 'https://lenta.ru/rss/articles/world',
 };
 
 async function loadNews(){
@@ -52,7 +52,7 @@ async function fetchFromRss(key){
   return json.items.slice(0, 5).map(item => ({
     title: item.title,
     url: item.link,
-    src: 'BBC',
+    src: key === 'tech' ? 'Хабр' : 'Лента',
     t: item.pubDate ? new Date(item.pubDate).toLocaleDateString('ru') : '',
   }));
 }
