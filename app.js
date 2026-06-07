@@ -1,5 +1,6 @@
 let refreshTimer = null;
 let refreshRemain = CONFIG.UPDATE_INTERVAL;
+let fetchController = null;
 
 function toggleTheme(){
   const h = document.documentElement;
@@ -94,8 +95,9 @@ function showFact(text){
 }
 
 async function loadFact(){
+  const signal = window.__abortSignal;
   try{
-    const res = await fetch(CONFIG.FACT_API);
+    const res = await fetch(CONFIG.FACT_API, {signal});
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
     const text = data.text || data.value || '—';
@@ -103,6 +105,7 @@ async function loadFact(){
     showFact(text);
     return true;
   }catch(e){
+    if (e.name === 'AbortError') return false;
     const cache = localStorage.getItem('fact_cache');
     if (cache) {
       const {text} = JSON.parse(cache);
@@ -118,14 +121,59 @@ async function loadFact(){
 }
 
 async function updateAll(){
+  if (fetchController) fetchController.abort();
+  fetchController = new AbortController();
+  window.__abortSignal = fetchController.signal;
   setStatus('loading','обновление...');
   flashAll();
   const results = await Promise.allSettled([
-    loadWeather(), loadCurrency(), loadNews(), loadFact()
+    loadWeather(), loadCurrency(), loadNews(), loadFact(), loadCrypto(), loadGitHub()
   ]);
   const ok = results.every(r=>r.status==='fulfilled'&&r.value!==false);
   setStatus(ok?'ok':'error', ok?'обн через...':'частичные ошибки');
   startRefreshBar();
+}
+
+function initDragDrop(){
+  const grid = document.querySelector('.grid');
+  let dragEl = null;
+
+  document.querySelectorAll('.widget').forEach(w => {
+    w.setAttribute('draggable', 'true');
+    w.addEventListener('dragstart', () => { dragEl = w; w.style.opacity = '0.4'; });
+    w.addEventListener('dragend', () => { w.style.opacity = '1'; });
+    w.addEventListener('dragover', e => { e.preventDefault(); w.style.borderColor = 'var(--accent)'; });
+    w.addEventListener('dragleave', () => { w.style.borderColor = ''; });
+    w.addEventListener('drop', e => {
+      e.preventDefault();
+      w.style.borderColor = '';
+      if (dragEl && dragEl !== w) {
+        const items = [...grid.children];
+        const from = items.indexOf(dragEl);
+        const to = items.indexOf(w);
+        if (from < to) grid.insertBefore(dragEl, w.nextSibling);
+        else grid.insertBefore(dragEl, w);
+        saveGridOrder();
+      }
+    });
+  });
+}
+
+function saveGridOrder(){
+  const ids = [...document.querySelectorAll('.widget')].map(w => w.className);
+  localStorage.setItem('infodash_grid', JSON.stringify(ids));
+}
+
+function restoreGridOrder(){
+  const saved = localStorage.getItem('infodash_grid');
+  if (!saved) return;
+  const ids = JSON.parse(saved);
+  const grid = document.querySelector('.grid');
+  const widgets = {};
+  document.querySelectorAll('.widget').forEach(w => { widgets[w.className] = w; });
+  ids.forEach(cls => {
+    if (widgets[cls]) grid.appendChild(widgets[cls]);
+  });
 }
 
 restoreTheme();
@@ -133,6 +181,9 @@ updateClock();
 setInterval(updateClock, 1000);
 
 window.addEventListener('load', async ()=>{
+  restoreCity();
+  restoreGridOrder();
+  initDragDrop();
   await updateAll();
   setInterval(updateAll, CONFIG.UPDATE_INTERVAL * 1000);
 });

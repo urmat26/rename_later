@@ -3,8 +3,9 @@ let prevRates = {};
 async function loadCurrency(){
   const w = document.querySelector('.widget--currency');
   flashWidget(w);
+  const signal = window.__abortSignal;
   try{
-    const res = await fetch('https://v6.exchangerate-api.com/v6/a50032bc9b3ca7b0e5f85291/latest/USD');
+    const res = await fetch('https://v6.exchangerate-api.com/v6/a50032bc9b3ca7b0e5f85291/latest/USD', {signal});
     if(!res.ok) throw new Error(res.status);
     const data = await res.json();
     const rates = data.conversion_rates;
@@ -35,6 +36,7 @@ async function loadCurrency(){
       `Обновлено: ${new Date().toLocaleTimeString('ru')} · База: USD`;
     return true;
   }catch(e){
+    if (e.name === 'AbortError') return false;
     const cache = localStorage.getItem('currency_cache');
     if(cache){
       const {currencies} = JSON.parse(cache);

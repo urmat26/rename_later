@@ -10,10 +10,11 @@ const NEWS_RSS = {
 async function loadNews(){
   const w = document.querySelector('.widget--news');
   flashWidget(w);
+  const signal = window.__abortSignal;
   try {
     const keys = Object.keys(NEWS_RSS);
     const results = await Promise.allSettled(
-      keys.map(key => fetchFromRss(key))
+      keys.map(key => fetchFromRss(key, signal))
     );
 
     const allNews = {};
@@ -29,6 +30,7 @@ async function loadNews(){
     label.innerHTML = label.innerHTML.replace(' ⚠', '');
     return true;
   } catch(e) {
+    if (e.name === 'AbortError') return false;
     const cache = localStorage.getItem(NEWS_CACHE_KEY);
     if (cache) {
       const {data} = JSON.parse(cache);
@@ -42,10 +44,10 @@ async function loadNews(){
   }
 }
 
-async function fetchFromRss(key){
+async function fetchFromRss(key, signal){
   const rssUrl = NEWS_RSS[key];
   const proxy = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-  const res = await fetch(proxy);
+  const res = await fetch(proxy, {signal});
   if (!res.ok) throw new Error(res.status);
   const json = await res.json();
   if (json.status !== 'ok') throw new Error(json.message);

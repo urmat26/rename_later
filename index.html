@@ -49,7 +49,7 @@
 
   <!-- WEATHER -->
   <div class="widget widget--weather">
-    <div class="widget-label">🌤 погода · бишкек <span class="spin"></span></div>
+    <div class="widget-label">🌤 погода · бишкек <span class="spin"></span> <span class="city-edit" onclick="changeCity(prompt('Введи город:'))" title="Сменить город">✏</span></div>
     <div id="weatherContent">
       <div class="skeleton" style="width:55%;height:52px;border-radius:10px"></div>
       <div class="skeleton" style="width:80%"></div>
@@ -62,9 +62,6 @@
     <div class="widget-label">💱 курсы валют <span class="spin"></span></div>
     <div class="curr-meta" id="currMeta">загрузка...</div>
     <div class="currency-grid" id="currencyContent">
-      <div class="skeleton" style="height:86px;border-radius:12px"></div>
-      <div class="skeleton" style="height:86px;border-radius:12px"></div>
-      <div class="skeleton" style="height:86px;border-radius:12px"></div>
       <div class="skeleton" style="height:86px;border-radius:12px"></div>
       <div class="skeleton" style="height:86px;border-radius:12px"></div>
       <div class="skeleton" style="height:86px;border-radius:12px"></div>
@@ -86,6 +83,16 @@
     </div>
   </div>
 
+  <!-- CRYPTO -->
+  <div class="widget widget--crypto">
+    <div class="widget-label">₿ криптовалюты <span class="spin"></span></div>
+    <div id="cryptoContent">
+      <div class="skeleton" style="height:58px;border-radius:12px"></div>
+      <div class="skeleton" style="height:58px;border-radius:12px"></div>
+      <div class="skeleton" style="height:58px;border-radius:12px"></div>
+    </div>
+  </div>
+
   <!-- FACT -->
   <div class="widget widget--fact">
     <div class="widget-label">💡 факт дня</div>
@@ -93,6 +100,18 @@
     <button class="fact-btn" onclick="loadFact()">
       <span class="icon">↻</span> новый факт
     </button>
+  </div>
+
+  <!-- GITHUB -->
+  <div class="widget widget--github">
+    <div class="widget-label">🐙 github статистика <span class="spin"></span></div>
+    <div id="githubContent">
+      <div class="github-stats">
+        <div class="skeleton" style="width:50px;height:32px;border-radius:6px;display:inline-block;margin:0 auto"></div>
+        <div class="skeleton" style="width:50px;height:32px;border-radius:6px;display:inline-block;margin:0 auto"></div>
+        <div class="skeleton" style="width:50px;height:32px;border-radius:6px;display:inline-block;margin:0 auto"></div>
+      </div>
+    </div>
   </div>
 
   <!-- CHART -->
@@ -113,7 +132,14 @@
 <script src="widgets/weather.js"></script>
 <script src="widgets/currency.js"></script>
 <script src="widgets/news.js"></script>
+<script src="widgets/crypto.js"></script>
+<script src="widgets/github.js"></script>
 <script src="chart-setup.js"></script>
 <script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js');
+}
+</script>
 </body>
 </html>

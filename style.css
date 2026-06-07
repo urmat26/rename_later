@@ -178,6 +178,8 @@ header {
 .widget--news     { --ab:var(--accent2); }
 .widget--chart    { --ab:var(--amber); grid-column:span 3; }
 .widget--fact     { --ab:var(--purple); }
+.widget--crypto   { --ab:var(--amber); }
+.widget--github   { --ab:var(--accent); }
 
 .widget-label {
   font-size:10px;
@@ -199,6 +201,12 @@ header {
   animation:spin 0.8s linear infinite;
 }
 .widget.updating .widget-label .spin { display:block; }
+
+.city-edit {
+  cursor:pointer; font-size:11px; opacity:0.4; transition:opacity 0.2s;
+  margin-left:auto; line-height:1; user-select:none;
+}
+.city-edit:hover { opacity:1; }
 
 .widget-error {
   color:var(--red);
@@ -303,6 +311,32 @@ header {
 .fact-btn:hover { color:var(--text);border-color:var(--purple); }
 .fact-btn .icon { display:inline-block;transition:transform 0.5s; }
 .fact-btn:hover .icon { transform:rotate(180deg); }
+
+/* ── CRYPTO ── */
+.crypto-item {
+  background:var(--bg3);border-radius:12px;padding:12px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:8px;border:1px solid transparent;
+  transition:border-color 0.3s;
+}
+.crypto-item:last-child { margin-bottom:0; }
+.crypto-top { display:flex;align-items:center;gap:8px;min-width:60px; }
+.crypto-icon { font-size:20px;line-height:1; }
+.crypto-code { font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--text2); }
+.crypto-price { font-size:18px;font-weight:800;letter-spacing:-0.5px; }
+.crypto-change { font-size:11px;font-family:'Space Mono',monospace;min-width:70px;text-align:right; }
+.crypto-change.up   { color:var(--green); }
+.crypto-change.down { color:var(--red); }
+.crypto-change.flat { color:var(--text2); }
+
+/* ── GITHUB ── */
+.github-stats { display:flex;justify-content:space-around;gap:12px;margin-bottom:12px; }
+.github-stat { text-align:center; }
+.github-num { font-size:32px;font-weight:800;letter-spacing:-1px;font-family:'Space Mono',monospace; }
+.github-label { font-size:10px;color:var(--text2);font-family:'Space Mono',monospace;margin-top:2px; }
+.github-meta { font-size:11px;color:var(--text2);font-family:'Space Mono',monospace;text-align:center; }
+.github-meta a { color:var(--accent);text-decoration:none; }
+.github-meta a:hover { text-decoration:underline; }
 
 .chart-tabs { display:flex;gap:8px;margin-bottom:14px; }
 .chart-tab {
