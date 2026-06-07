@@ -10,7 +10,7 @@ async function loadWeather(){
   const w = document.querySelector('.widget--weather');
   flashWidget(w);
   try{
-    const url=`https://api.open-meteo.com/v1/forecast?latitude=${CONFIG.CITY_LAT}&longitude=${CONFIG.CITY_LON}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=Asia%2FBishkek&forecast_days=7`;
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${CONFIG.CITY_LAT}&longitude=${CONFIG.CITY_LON}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=Asia%2FBishkek&forecast_days=7`;
     const res = await fetch(url);
     if(!res.ok) throw new Error(res.status);
     const data = await res.json();
@@ -21,14 +21,16 @@ async function loadWeather(){
     const el = document.getElementById('weatherContent');
     el.innerHTML = `
       <div class="weather-main">
-        <div class="weather-icon">${icon}</div>
-        <div class="weather-temp">${Math.round(cur.temperature_2m)}°</div>
+        <div class="weather-info">
+          <div class="weather-temp">${Math.round(cur.temperature_2m)}°</div>
+          <div class="weather-desc">${words.join(' ')}</div>
+          <div class="weather-city">${CONFIG.CITY} • Ощущ. как ${Math.round(cur.apparent_temperature)}°</div>
+        </div>
+        <div class="weather-icon-large">${icon}</div>
       </div>
-      <div class="weather-city">${CONFIG.CITY}</div>
-      <div class="weather-desc">${words.join(' ')}</div>
       <div class="weather-meta">
-        <div class="weather-pill">💧 <strong>${cur.relative_humidity_2m}%</strong></div>
-        <div class="weather-pill">💨 <strong>${Math.round(cur.wind_speed_10m)} км/ч</strong></div>
+        <div class="weather-pill"><span>💧 Влажность</span><strong>${cur.relative_humidity_2m}%</strong></div>
+        <div class="weather-pill"><span>💨 Ветер</span><strong>${Math.round(cur.wind_speed_10m)} км/ч</strong></div>
       </div>`;
     animateIn(el);
     updateWeatherChart(data.daily);
