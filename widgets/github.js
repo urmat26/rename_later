@@ -30,8 +30,8 @@ async function loadGitHub(){
     if (e.name === 'AbortError') return false;
     const cache = localStorage.getItem(GITHUB_CACHE_KEY);
     if (cache) {
-      const {data, commitCount, contribCount} = JSON.parse(cache);
-      renderGitHub(data, commitCount, contribCount || 0, true);
+      const cached = JSON.parse(cache);
+      renderGitHub(cached.data, cached.commitCount || 0, cached.contribCount || 0, true);
     } else {
       document.getElementById('githubContent').innerHTML = '<div class="widget-error">⚠ Нет данных</div>';
     }
