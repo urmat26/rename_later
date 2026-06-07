@@ -1,4 +1,4 @@
-const CACHE = 'infodash-v1';
+const CACHE = 'infodash-v2';
 const URLS = [
   '/',
   '/index.html',
