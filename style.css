@@ -17,20 +17,20 @@
   --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
 }
 [data-theme="light"] {
-  --bg: #f4f4f9;
+  --bg: #f4f6f8;
   --bg2: #ffffff;
-  --bg3: #e9e8f0;
-  --border: rgba(0,0,0,0.07);
-  --border2: rgba(0,0,0,0.14);
-  --text: #1a1a2e;
-  --text2: rgba(26,26,46,0.45);
-  --accent: #6c5ce7;
-  --accent2: #e84393;
-  --green: #00b894;
-  --amber: #e17055;
-  --red: #d63031;
-  --blue: #0984e3;
-  --purple: #a29bfe;
+  --bg3: #eef2f6;
+  --border: rgba(0,0,0,0.05);
+  --border2: rgba(0,0,0,0.09);
+  --text: #202124;
+  --text2: #5f6368;
+  --accent: #4f46e5;
+  --accent2: #ec4899;
+  --green: #10b981;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -136,15 +136,15 @@ header {
   cursor:default;
 }
 [data-theme="light"] .widget {
-  box-shadow:0 2px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
 }
 .widget:hover {
   border-color:var(--border2);
   transform:translateY(-2px);
-  box-shadow:0 8px 32px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
 }
 [data-theme="light"] .widget:hover {
-  box-shadow:0 6px 24px rgba(0,0,0,0.10);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
 }
 
 .widget::before {
@@ -278,8 +278,8 @@ header {
   background:none;border:none;color:var(--text2);cursor:pointer;
   transition:background 0.2s, color 0.2s;
 }
-.news-tab.active { background:var(--accent2);color:#fff; }
-.news-tab:not(.active):hover { background:var(--bg3);color:var(--text); }
+.news-tab.active { background:var(--accent2);color:#fff; box-shadow: 0 2px 8px rgba(236,72,153,0.3); }
+.news-tab:not(.active):hover { background:var(--bg3);color:var(--text); transform: translateY(-1px); }
 .news-panel { display:none; }
 .news-panel.active { display:block; animation:flipIn 0.3s ease; }
 .news-list { display:flex;flex-direction:column;gap:10px; }
@@ -309,8 +309,8 @@ header {
   font-size:11px;font-family:'Space Mono',monospace;
   transition:all 0.2s;
 }
-.chart-tab.active { background:var(--amber);color:#111;border-color:transparent; }
-.chart-tab:not(.active):hover { color:var(--text);border-color:var(--border2); }
+.chart-tab.active { background:var(--amber);color:#fff;border-color:transparent; box-shadow: 0 2px 8px rgba(245,158,11,0.3); }
+.chart-tab:not(.active):hover { color:var(--text);border-color:var(--border2); transform: translateY(-1px); }
 .chart-wrapper { height:200px;position:relative; }
 
 .skeleton {

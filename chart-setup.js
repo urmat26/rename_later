@@ -29,7 +29,7 @@ function groupWeatherCodes(codes){
 
 function renderChart(type){
   const isDark = document.documentElement.dataset.theme==='dark';
-  const textColor = isDark?'rgba(240,240,248,0.5)':'rgba(8,8,16,0.45)';
+  const textColor = isDark?'rgba(240,240,248,0.5)':'#5f6368';
   if(!chartDailyData) return;
 
   if(weatherChart){ weatherChart.destroy(); weatherChart=null; }
@@ -79,13 +79,13 @@ function renderChart(type){
       labels,
       datasets:[
         {label:'Макс °C',data:chartDailyData.temperature_2m_max,
-         borderColor:'#f87171',backgroundColor:type==='bar'?'rgba(248,113,113,0.6)':'rgba(248,113,113,0.12)',
+         borderColor:'#ef4444',backgroundColor:type==='bar'?'rgba(239,68,68,0.6)':'rgba(239,68,68,0.12)',
          tension:0.4,fill:type==='line',pointRadius:5,pointHoverRadius:8,
-         pointBackgroundColor:'#f87171'},
+         pointBackgroundColor:'#ef4444'},
         {label:'Мин °C',data:chartDailyData.temperature_2m_min,
-         borderColor:'#60a5fa',backgroundColor:type==='bar'?'rgba(96,165,250,0.6)':'rgba(96,165,250,0.08)',
+         borderColor:'#3b82f6',backgroundColor:type==='bar'?'rgba(59,130,246,0.6)':'rgba(59,130,246,0.08)',
          tension:0.4,fill:type==='line',pointRadius:5,pointHoverRadius:8,
-         pointBackgroundColor:'#60a5fa'},
+         pointBackgroundColor:'#3b82f6'},
       ]
     },
     options:{
