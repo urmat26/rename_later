@@ -1,6 +1,5 @@
 let refreshTimer = null;
 let refreshRemain = CONFIG.UPDATE_INTERVAL;
-let mainTimer = null;
 
 function toggleTheme(){
   const h = document.documentElement;
@@ -15,13 +14,6 @@ function restoreTheme(){
   if (saved === 'light' || saved === 'dark'){
     document.documentElement.dataset.theme = saved;
   }
-}
-
-function changeInterval(sec){
-  CONFIG.UPDATE_INTERVAL = Number(sec);
-  clearInterval(mainTimer);
-  startRefreshBar();
-  mainTimer = setInterval(updateAll, CONFIG.UPDATE_INTERVAL * 1000);
 }
 
 function flashWidget(widget){
@@ -141,7 +133,6 @@ updateClock();
 setInterval(updateClock, 1000);
 
 window.addEventListener('load', async ()=>{
-  document.getElementById('intervalSelect').value = String(CONFIG.UPDATE_INTERVAL);
   await updateAll();
-  mainTimer = setInterval(updateAll, CONFIG.UPDATE_INTERVAL * 1000);
+  setInterval(updateAll, CONFIG.UPDATE_INTERVAL * 1000);
 });
