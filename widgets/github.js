@@ -6,7 +6,7 @@ async function loadGitHub(){
   flashWidget(w);
   const signal = window.__abortSignal;
   try{
-    const res = await fetch('https://api.github.com/repos/urmat26/rename_later', {signal});
+    const res = await fetch('https://api.github.com/repos/urmat26/infoDash', {signal});
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
     localStorage.setItem(GITHUB_CACHE_KEY, JSON.stringify({data, ts: Date.now()}));
