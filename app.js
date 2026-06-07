@@ -1,10 +1,27 @@
 let refreshTimer = null;
 let refreshRemain = CONFIG.UPDATE_INTERVAL;
+let mainTimer = null;
 
 function toggleTheme(){
   const h = document.documentElement;
-  h.dataset.theme = h.dataset.theme==='dark'?'light':'dark';
+  const next = h.dataset.theme==='dark'?'light':'dark';
+  h.dataset.theme = next;
+  localStorage.setItem('infodash_theme', next);
   if(weatherChart) updateChartTheme();
+}
+
+function restoreTheme(){
+  const saved = localStorage.getItem('infodash_theme');
+  if (saved === 'light' || saved === 'dark'){
+    document.documentElement.dataset.theme = saved;
+  }
+}
+
+function changeInterval(sec){
+  CONFIG.UPDATE_INTERVAL = Number(sec);
+  clearInterval(mainTimer);
+  startRefreshBar();
+  mainTimer = setInterval(updateAll, CONFIG.UPDATE_INTERVAL * 1000);
 }
 
 function flashWidget(widget){
@@ -71,20 +88,41 @@ const RU_FACTS = [
 ];
 
 let lastFactIdx = -1;
-function loadFact(){
-  let idx;
-  do { idx = Math.floor(Math.random()*RU_FACTS.length); } while(idx===lastFactIdx);
-  lastFactIdx = idx;
+
+function showFact(text){
   const el = document.getElementById('factText');
   el.style.opacity = '0';
   el.style.transform = 'translateY(6px)';
   setTimeout(()=>{
-    el.textContent = `"${RU_FACTS[idx]}"`;
+    el.textContent = `"${text}"`;
     el.style.transition = 'opacity 0.4s, transform 0.4s';
     el.style.opacity = '1';
     el.style.transform = 'none';
   }, 200);
-  return true;
+}
+
+async function loadFact(){
+  try{
+    const res = await fetch(CONFIG.FACT_API);
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    const text = data.text || data.value || '—';
+    localStorage.setItem('fact_cache', JSON.stringify({text, ts: Date.now()}));
+    showFact(text);
+    return true;
+  }catch(e){
+    const cache = localStorage.getItem('fact_cache');
+    if (cache) {
+      const {text} = JSON.parse(cache);
+      showFact(text + ' ⚠');
+    } else {
+      let idx;
+      do { idx = Math.floor(Math.random()*RU_FACTS.length); } while(idx===lastFactIdx);
+      lastFactIdx = idx;
+      showFact(RU_FACTS[idx]);
+    }
+    return false;
+  }
 }
 
 async function updateAll(){
@@ -98,10 +136,12 @@ async function updateAll(){
   startRefreshBar();
 }
 
+restoreTheme();
 updateClock();
 setInterval(updateClock, 1000);
 
 window.addEventListener('load', async ()=>{
+  document.getElementById('intervalSelect').value = String(CONFIG.UPDATE_INTERVAL);
   await updateAll();
-  setInterval(updateAll, CONFIG.UPDATE_INTERVAL * 1000);
+  mainTimer = setInterval(updateAll, CONFIG.UPDATE_INTERVAL * 1000);
 });
