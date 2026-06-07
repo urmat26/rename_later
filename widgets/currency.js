@@ -4,15 +4,14 @@ async function loadCurrency(){
   const w = document.querySelector('.widget--currency');
   flashWidget(w);
   try{
-    const res = await fetch('https://open.er-api.com/v6/latest/USD');
+    const res = await fetch('https://v6.exchangerate-api.com/v6/a50032bc9b3ca7b0e5f85291/latest/USD');
     if(!res.ok) throw new Error(res.status);
-    const {rates} = await res.json();
+    const data = await res.json();
+    const rates = data.conversion_rates;
     const kgsPerUsd = rates.KGS;
     const currencies = CONFIG.EXCHANGE_TARGETS.map(code => ({
       code,
-      kgs: code === 'USD'
-        ? kgsPerUsd
-        : kgsPerUsd / rates[code] * rates.KGS
+      kgs: rates.KGS / rates[code]
     }));
     localStorage.setItem('currency_cache', JSON.stringify({currencies,ts:Date.now()}));
 

@@ -4,8 +4,7 @@ const CONFIG = {
   CITY_LON: 74.59,
   UPDATE_INTERVAL: 60,
 
-  EXCHANGE_BASE: 'USD',
-  EXCHANGE_TARGETS: ['USD', 'EUR', 'RUB'],
+  EXCHANGE_TARGETS: ['USD', 'EUR', 'RUB', 'GBP', 'CNY', 'KZT'],
 
   FACT_API: 'https://uselessfacts.jsph.pl/api/v2/facts/random?language=en',
 };
